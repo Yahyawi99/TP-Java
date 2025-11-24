@@ -42,8 +42,8 @@ public class EmployeService implements IDac<Employee> {
       while (rs.next())
         System.out.println(rs.getDate("dateEmbaucheD"));
 
-      // Employee emp = new Employee(rs.getInt("Matricule"), rs.getString("Nom"),
-      // rs.getString("Prenom"), rs.getDate("dateEmbaucheD").,rs.getString("Sexe"));
+      Employee emp = new Employee(rs.getInt("Matricule"), rs.getString("Nom"),
+      rs.getString("Prenom"), rs.getDate("dateEmbaucheD").,rs.getString("Sexe"));
 
       // employees.add(, ts.findById(rs.getInt("tracker_id"))));
     } catch (SQLException e) {
