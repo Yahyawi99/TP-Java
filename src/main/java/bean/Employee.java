@@ -1,5 +1,7 @@
 package bean;
 
+import java.sql.Date;
+
 public class Employee {
     private int Matricule;
     private String Nom;
@@ -8,16 +10,16 @@ public class Employee {
     private String sexe;
     private static String[] specialite;
 
-    public Employee() {
-
-    }
-
     public Employee(int Matricule, String Nom, String Prenom, Date dateEmbaucheD, String sexe) {
         this.Matricule = Matricule;
         this.Nom = Nom;
         this.Prenom = Prenom;
         this.dateEmbaucheD = dateEmbaucheD;
         this.sexe = sexe;
+
+    }
+
+    public Employee() {
 
     }
 

@@ -28,7 +28,9 @@ public class Test {
       // + "references tracker(id);";
 
       Statement st = Connexion.getInstance().getCn().createStatement();
-      st.execute("drop table if exists position");
+      // st.execute("select * from employees");
+
+      // st.execute("drop table if exists position");
       // st.execute("drop table if exists tracker");
       // st.executeUpdate(TTracker);
       // st.executeUpdate(TPosition);

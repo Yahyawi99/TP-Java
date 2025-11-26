@@ -34,18 +34,22 @@ public class EmployeService implements IDac<Employee> {
     List<Employee> employees = new ArrayList<Employee>();
 
     try {
-      String req = "select * from Employee";
+      String req = "select * from employees";
       PreparedStatement pr = Connexion.getInstance().getCn().prepareStatement(req);
 
       ResultSet rs = pr.executeQuery();
 
-      while (rs.next())
-        System.out.println(rs.getDate("dateEmbaucheD"));
+      while (rs.next()) {
+        // Matricule | Nom | Prénom | Spécialité | Date_Embauche | Sexe
+        Employee emp = new Employee();
+        emp.setMatricule(rs.getInt("Matricule"));
+        emp.setNom(rs.getString("Nom"));
+        emp.setPrenom(rs.getString("Prénom"));
+        emp.setDateEmbaucheD(rs.getDate("Date_Embauche"));
+        emp.setSexe(rs.getString("Sexe"));
 
-      Employee emp = new Employee(rs.getInt("Matricule"), rs.getString("Nom"),
-      rs.getString("Prenom"), rs.getDate("dateEmbaucheD").,rs.getString("Sexe"));
-
-      // employees.add(, ts.findById(rs.getInt("tracker_id"))));
+        employees.add(emp);
+      }
     } catch (SQLException e) {
       e.printStackTrace();
     }
