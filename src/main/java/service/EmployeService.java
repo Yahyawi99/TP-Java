@@ -27,7 +27,27 @@ public class EmployeService implements IDac<Employee> {
   };
 
   public Employee findById(int id) {
-    return new Employee();
+    Employee employee = null;
+
+    try {
+      String query = "Select * from employees where id=" + id;
+      PreparedStatement pr = Connexion.getInstance().getCn().prepareStatement(query);
+
+      ResultSet rs = pr.executeQuery();
+
+      if (rs.next())
+        employee = new Employee();
+      employee.setMatricule(rs.getInt("Matricule"));
+      employee.setNom(rs.getString("Nom"));
+      employee.setPrenom(rs.getString("Prénom"));
+      employee.setDateEmbaucheD(rs.getDate("Date_Embauche"));
+      employee.setSexe(rs.getString("Sexe"));
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return employee;
   };
 
   public List<Employee> findAll() {
@@ -40,7 +60,6 @@ public class EmployeService implements IDac<Employee> {
       ResultSet rs = pr.executeQuery();
 
       while (rs.next()) {
-        // Matricule | Nom | Prénom | Spécialité | Date_Embauche | Sexe
         Employee emp = new Employee();
         emp.setMatricule(rs.getInt("Matricule"));
         emp.setNom(rs.getString("Nom"));
