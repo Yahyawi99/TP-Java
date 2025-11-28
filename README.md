@@ -1,4 +1,4 @@
 ## in Root
 
-javac -d out src/main/java/\*_/_.java
-java -cp "out:/usr/share/java/mysql-connector-java.jar" test.Test
+`javac -d out src/main/java/**/*.java`
+`java -cp "out:src/main/resources:/usr/share/java/mysql-connector-java.jar" test.Test`

@@ -1,6 +1,7 @@
 package bean;
 
 import java.sql.Date;
+import java.util.*;
 
 public class Employee {
     private int Matricule;
@@ -8,14 +9,16 @@ public class Employee {
     private String Prenom;
     private Date dateEmbaucheD;
     private String sexe;
-    private static String[] specialite;
+    private ArrayList<String> specialite;
 
-    public Employee(int Matricule, String Nom, String Prenom, Date dateEmbaucheD, String sexe) {
+    public Employee(int Matricule, String Nom, String Prenom, Date dateEmbaucheD, String sexe,
+            ArrayList<String> specialite) {
         this.Matricule = Matricule;
         this.Nom = Nom;
         this.Prenom = Prenom;
         this.dateEmbaucheD = dateEmbaucheD;
         this.sexe = sexe;
+        this.specialite = specialite;
 
     }
 
@@ -65,13 +68,12 @@ public class Employee {
         this.sexe = sexe;
     }
 
-    //
-    public static String[] getSpecialite() {
+    public ArrayList<String> getSpecialite() {
         return specialite;
     }
 
-    public static void setSpecialite(String[] newSpecialite) {
-        specialite = newSpecialite;
+    public void setSpecialite(String[] specialite) {
+        this.specialite = new ArrayList<String>(Arrays.asList(specialite));
     }
 
     @Override

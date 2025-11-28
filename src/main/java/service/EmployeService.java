@@ -15,14 +15,17 @@ public class EmployeService implements IDac<Employee> {
   @Override
   public boolean create(Employee data) {
     try {
-      String query = "insert into employees values (?,?,?,?,?,?)";
+      String query = "insert into employees (Nom,Prenom,dateEmbauche,specialite,sexe) values (?,?,?,?,?)";
       PreparedStatement pr = Connexion.getInstance().getCn().prepareStatement(query);
 
-      pr.setInt(1, data.getMatricule());
-      pr.setString(2, data.getNom());
-      pr.setString(3, data.getPrenom());
-      pr.setDate(4, data.getDateEmbaucheD());
-      pr.setArray(5, Connexion.getInstance().getCn().createArrayOf("VARCHAR", data.getSpecialite()));
+      pr.setString(1, data.getNom());
+      pr.setString(2, data.getPrenom());
+      pr.setDate(3, data.getDateEmbaucheD());
+
+      String spec = String.join(",", data.getSpecialite());
+      pr.setString(4, spec);
+
+      pr.setString(5, data.getSexe());
 
       if (pr.executeUpdate() != 0)
         return true;
@@ -35,7 +38,7 @@ public class EmployeService implements IDac<Employee> {
 
   public boolean update(Employee data) {
     try {
-      String query = "update employees set Name = ?, Prenom = ?, dateEmbauche = ?, sexe = ?, specialite = ? ,where Matricule = ?";
+      String query = "update employees set Nom = ?, Prenom = ?, dateEmbauche = ?, sexe = ?, specialite = ? where Matricule = ?";
       PreparedStatement pr = Connexion.getInstance().getCn().prepareStatement(query);
 
       pr.setString(1, data.getNom());
@@ -62,7 +65,7 @@ public class EmployeService implements IDac<Employee> {
 
   public boolean delete(Employee data) {
     try {
-      String query = "delete from employee where Matricule = ?";
+      String query = "delete from employees where Matricule = ?";
       PreparedStatement pr = Connexion.getInstance().getCn().prepareStatement(query);
 
       pr.setInt(1, data.getMatricule());
@@ -89,9 +92,10 @@ public class EmployeService implements IDac<Employee> {
         Employee employee = new Employee();
         employee.setMatricule(rs.getInt("Matricule"));
         employee.setNom(rs.getString("Nom"));
-        employee.setPrenom(rs.getString("Prénom"));
-        employee.setDateEmbaucheD(rs.getDate("Date_Embauche"));
-        employee.setSexe(rs.getString("Sexe"));
+        employee.setPrenom(rs.getString("Prenom"));
+        employee.setDateEmbaucheD(rs.getDate("dateEmbauche"));
+        employee.setSexe(rs.getString("sexe"));
+        employee.setSpecialite(rs.getString("specialite").split(","));
 
         return employee;
       }
@@ -116,12 +120,13 @@ public class EmployeService implements IDac<Employee> {
         Employee emp = new Employee();
         emp.setMatricule(rs.getInt("Matricule"));
         emp.setNom(rs.getString("Nom"));
-        emp.setPrenom(rs.getString("Prénom"));
-        emp.setDateEmbaucheD(rs.getDate("Date_Embauche"));
-        emp.setSexe(rs.getString("Sexe"));
+        emp.setPrenom(rs.getString("Prenom"));
+        emp.setDateEmbaucheD(rs.getDate("dateEmbauche"));
+        emp.setSexe(rs.getString("sexe"));
+        emp.setSpecialite(rs.getString("specialite").split(","));
 
-        String spec = rs.getString("specialite");
-        emp.setSpecialite(spec.split(","));
+        employees.add(emp);
+
       }
     } catch (SQLException e) {
       e.printStackTrace();
