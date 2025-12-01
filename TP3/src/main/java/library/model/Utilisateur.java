@@ -3,13 +3,16 @@ package main.java.library.model;
 import java.util.Date;
 
 public class Utilisateur {
-  private Long id;
+  private int id;
   private String nom;
   private String prenom;
   private String email;
   private Date dateInscription;
 
-  public Utilisateur(Long id, String nom, String prenom, String email, Date dateInscription) {
+  public Utilisateur() {
+  }
+
+  public Utilisateur(int id, String nom, String prenom, String email, Date dateInscription) {
     this.id = id;
     this.nom = nom;
     this.prenom = prenom;
@@ -17,11 +20,19 @@ public class Utilisateur {
     this.dateInscription = dateInscription;
   }
 
-  public Long getId() {
+  public Utilisateur(String nom, String prenom, String email, Date dateInscription) {
+    this.nom = nom;
+    this.prenom = prenom;
+    this.email = email;
+    this.dateInscription = dateInscription;
+  }
+
+  // Getters and Setters
+  public int getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(int id) {
     this.id = id;
   }
 
@@ -40,5 +51,4 @@ public class Utilisateur {
   public Date getDateInscription() {
     return dateInscription;
   }
-
 }

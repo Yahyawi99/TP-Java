@@ -10,7 +10,9 @@ USE bibliotheque;
 CREATE TABLE utilisateurs (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
-    email VARCHAR(100) UNIQUE NOT NULL
+    prenom VARCHAR(100)  NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    dateInscription DATE NOT NULL
 );
 
 -- ===========================

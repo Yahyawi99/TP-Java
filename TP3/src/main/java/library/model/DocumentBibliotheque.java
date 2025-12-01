@@ -20,15 +20,9 @@ public abstract class DocumentBibliotheque implements Empruntable {
   public abstract int getDureeEmpruntMax();
 
   @Override
-  public String toString() {
-    return "ID: " + id + ", Titre: " + titre + ", Année: " + anneePublication;
-  }
-
-  @Override
   public boolean emprunter(Utilisateur utilisateur, Date dateEmprunt) {
-    if (isDisponible()) {
+    if (this.disponible) {
       this.disponible = false;
-      System.out.println(titre + " emprunté par " + utilisateur.getNom());
       return true;
     }
     return false;
@@ -45,6 +39,32 @@ public abstract class DocumentBibliotheque implements Empruntable {
     return this.disponible;
   }
 
-  // Getters and Setters (omitted for brevity)
-  // ...
+  // Getters and Setters
+  public int getId() {
+    return id;
+  }
+
+  public String getTitre() {
+    return titre;
+  }
+
+  public void setTitre(String titre) {
+    this.titre = titre;
+  }
+
+  public Date getAnneePublication() {
+    return anneePublication;
+  }
+
+  public void setAnneePublication(Date anneePublication) {
+    this.anneePublication = anneePublication;
+  }
+
+  public boolean getDisponible() {
+    return disponible;
+  }
+
+  public void setDisponible(boolean disponible) {
+    this.disponible = disponible;
+  }
 }

@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class Livre extends DocumentBibliotheque {
   private String auteur;
-  private String isbn; // Added for completeness, if not used, remove.
+  private String isbn;
   private int nombrePages;
   private String genre;
 
@@ -24,7 +24,14 @@ public class Livre extends DocumentBibliotheque {
 
   @Override
   public int getDureeEmpruntMax() {
-    return 21; // Example: 3 weeks
+    return 21;
   }
-  // Getters/Setters/toString...
+
+  public String getAuteur() {
+    return auteur;
+  }
+
+  public String getGenre() {
+    return genre;
+  }
 }
