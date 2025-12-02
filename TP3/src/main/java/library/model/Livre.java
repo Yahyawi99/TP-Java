@@ -34,4 +34,12 @@ public class Livre extends DocumentBibliotheque {
   public String getGenre() {
     return genre;
   }
+
+  public String getIsbn() {
+    return isbn;
+  }
+
+  public int getNombrePages() {
+    return nombrePages;
+  }
 }

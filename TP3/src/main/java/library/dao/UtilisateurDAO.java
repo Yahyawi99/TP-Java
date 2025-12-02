@@ -20,7 +20,7 @@ public class UtilisateurDAO implements IDAO<Utilisateur> {
   }
 
   @Override
-  public Utilisateur findById(Long id) {
+  public Utilisateur findById(int id) {
     String query = "SELECT id, nom, prenom, email, dateInscription FROM utilisateurs WHERE id = ?";
 
     Utilisateur user = new Utilisateur();
@@ -102,7 +102,7 @@ public class UtilisateurDAO implements IDAO<Utilisateur> {
   }
 
   @Override
-  public boolean delete(Long id) {
+  public boolean delete(int id) {
     String query = "DELETE FROM utilisateurs WHERE id = ?";
     try {
       PreparedStatement stmt = Connexion.getInstance().getCn().prepareStatement(query);

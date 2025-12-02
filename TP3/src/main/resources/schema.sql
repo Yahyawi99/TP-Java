@@ -38,9 +38,6 @@ CREATE TABLE emprunts (
 
     date_emprunt DATE NOT NULL,
     date_retour_prevue DATE NOT NULL,
-    date_retour_effective DATE NULL,
-
-    retourne BOOLEAN NOT NULL DEFAULT FALSE,
 
     FOREIGN KEY (utilisateur_id) REFERENCES utilisateurs(id)
         ON DELETE CASCADE
