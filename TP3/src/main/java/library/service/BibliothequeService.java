@@ -6,7 +6,6 @@ import main.java.library.model.*;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class BibliothequeService implements Recherchable {
 
