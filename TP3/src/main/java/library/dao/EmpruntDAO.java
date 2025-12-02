@@ -5,7 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import connexion.Connexion;
+import main.java.library.connexion.DatabaseManager;
 
 public class EmpruntDAO implements IDAO<Emprunt> {
 
@@ -35,7 +35,7 @@ public class EmpruntDAO implements IDAO<Emprunt> {
   @Override
   public Emprunt findById(int id) {
     String SQL = "SELECT * FROM emprunts WHERE id = ?";
-    try (PreparedStatement stmt = Connexion.getInstance().getCn().prepareStatement(SQL)) {
+    try (PreparedStatement stmt = DatabaseManager.getInstance().getCn().prepareStatement(SQL)) {
       stmt.setLong(1, id);
       try (ResultSet rs = stmt.executeQuery()) {
         if (rs.next()) {
@@ -53,7 +53,7 @@ public class EmpruntDAO implements IDAO<Emprunt> {
     List<Emprunt> emprunts = new ArrayList<>();
     String SQL = "SELECT * FROM emprunts ORDER BY date_emprunt DESC";
 
-    try (PreparedStatement stmt = Connexion.getInstance().getCn().prepareStatement(SQL);
+    try (PreparedStatement stmt = DatabaseManager.getInstance().getCn().prepareStatement(SQL);
         ResultSet rs = stmt.executeQuery()) {
 
       while (rs.next()) {
@@ -75,7 +75,7 @@ public class EmpruntDAO implements IDAO<Emprunt> {
     String SQL = "INSERT INTO emprunts (utilisateur_id, document_id, date_emprunt, date_retour_prevue) " +
         "VALUES (?, ?, ?, ?)";
     try (
-        PreparedStatement stmt = Connexion.getInstance().getCn().prepareStatement(SQL,
+        PreparedStatement stmt = DatabaseManager.getInstance().getCn().prepareStatement(SQL,
             Statement.RETURN_GENERATED_KEYS)) {
 
       stmt.setLong(1, data.getUtilisateur().getId());
@@ -100,7 +100,7 @@ public class EmpruntDAO implements IDAO<Emprunt> {
   public boolean update(Emprunt emprunt) {
     String query = "UPDATE emprunts SET date_retour_prevue = ? WHERE id = ?";
     try {
-      PreparedStatement stmt = Connexion.getInstance().getCn().prepareStatement(query);
+      PreparedStatement stmt = DatabaseManager.getInstance().getCn().prepareStatement(query);
 
       if (emprunt.getDateRetourPrevue() != null) {
         stmt.setDate(1, new java.sql.Date(emprunt.getDateRetourPrevue().getTime()));
@@ -122,7 +122,7 @@ public class EmpruntDAO implements IDAO<Emprunt> {
   public boolean delete(int id) {
     String query = "DELETE FROM emprunts WHERE id = ?";
     try {
-      PreparedStatement stmt = Connexion.getInstance().getCn().prepareStatement(query);
+      PreparedStatement stmt = DatabaseManager.getInstance().getCn().prepareStatement(query);
       stmt.setInt(1, id);
 
       if (stmt.executeUpdate() != 0) {

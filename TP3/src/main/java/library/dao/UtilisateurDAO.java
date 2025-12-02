@@ -5,7 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import connexion.Connexion;
+import main.java.library.connexion.DatabaseManager;
 
 public class UtilisateurDAO implements IDAO<Utilisateur> {
 
@@ -25,7 +25,7 @@ public class UtilisateurDAO implements IDAO<Utilisateur> {
 
     Utilisateur user = new Utilisateur();
     try {
-      PreparedStatement stmt = Connexion.getInstance().getCn().prepareStatement(query);
+      PreparedStatement stmt = DatabaseManager.getInstance().getCn().prepareStatement(query);
 
       stmt.setLong(1, id);
 
@@ -46,7 +46,7 @@ public class UtilisateurDAO implements IDAO<Utilisateur> {
 
     String query = "SELECT id, nom, prenom, email, dateInscription FROM utilisateurs";
     try {
-      PreparedStatement stmt = Connexion.getInstance().getCn().prepareStatement(query);
+      PreparedStatement stmt = DatabaseManager.getInstance().getCn().prepareStatement(query);
 
       ResultSet rs = stmt.executeQuery();
 
@@ -63,7 +63,7 @@ public class UtilisateurDAO implements IDAO<Utilisateur> {
   public boolean create(Utilisateur data) {
     String query = "INSERT INTO utilisateurs (nom, prenom, email, dateInscription) VALUES (?, ?, ?, ?)";
     try {
-      PreparedStatement stmt = Connexion.getInstance().getCn().prepareStatement(query);
+      PreparedStatement stmt = DatabaseManager.getInstance().getCn().prepareStatement(query);
 
       stmt.setString(1, data.getNom());
       stmt.setString(2, data.getPrenom());
@@ -83,7 +83,7 @@ public class UtilisateurDAO implements IDAO<Utilisateur> {
   public boolean update(Utilisateur utilisateur) {
     String query = "UPDATE utilisateurs SET nom = ?, prenom = ?, email = ?, dateInscription = ? WHERE id = ?";
     try {
-      PreparedStatement stmt = Connexion.getInstance().getCn().prepareStatement(query);
+      PreparedStatement stmt = DatabaseManager.getInstance().getCn().prepareStatement(query);
 
       stmt.setString(1, utilisateur.getNom());
       stmt.setString(2, utilisateur.getPrenom());
@@ -105,7 +105,7 @@ public class UtilisateurDAO implements IDAO<Utilisateur> {
   public boolean delete(int id) {
     String query = "DELETE FROM utilisateurs WHERE id = ?";
     try {
-      PreparedStatement stmt = Connexion.getInstance().getCn().prepareStatement(query);
+      PreparedStatement stmt = DatabaseManager.getInstance().getCn().prepareStatement(query);
       stmt.setLong(1, id);
 
       if (stmt.executeUpdate() != 0)

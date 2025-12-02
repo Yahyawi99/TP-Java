@@ -5,7 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import connexion.Connexion;
+import main.java.library.connexion.DatabaseManager;
 
 public class DocumentDAO implements IDAO<DocumentBibliotheque>, Recherchable {
 
@@ -16,8 +16,8 @@ public class DocumentDAO implements IDAO<DocumentBibliotheque>, Recherchable {
     String titre = baseRs.getString("titre");
 
     String specificSQL = "";
-    // Use the shared connection provided by Connexion.getInstance().getCn()
-    try (Connection conn = Connexion.getInstance().getCn()) {
+    // Use the shared connection provided by DatabaseManager.getInstance().getCn()
+    try (Connection conn = DatabaseManager.getInstance().getCn()) {
       switch (type) {
         case "LIVRE":
           // NOTE: Assumes columns 'isbn' and 'nombrePages' exist in the 'livres' table
@@ -75,7 +75,7 @@ public class DocumentDAO implements IDAO<DocumentBibliotheque>, Recherchable {
     List<DocumentBibliotheque> documents = new ArrayList<>();
 
     try {
-      PreparedStatement stmt = Connexion.getInstance().getCn().prepareStatement(sql);
+      PreparedStatement stmt = DatabaseManager.getInstance().getCn().prepareStatement(sql);
 
       stmt.setString(1, parameter);
       ResultSet rs = stmt.executeQuery();
@@ -117,7 +117,7 @@ public class DocumentDAO implements IDAO<DocumentBibliotheque>, Recherchable {
   public DocumentBibliotheque findById(int id) {
     String query = "SELECT id, titre, type, anneePublication, disponible FROM documents WHERE id = ?";
     try {
-      PreparedStatement stmt = Connexion.getInstance().getCn().prepareStatement(query);
+      PreparedStatement stmt = DatabaseManager.getInstance().getCn().prepareStatement(query);
 
       stmt.setInt(1, id);
       try (ResultSet rs = stmt.executeQuery()) {
@@ -137,7 +137,7 @@ public class DocumentDAO implements IDAO<DocumentBibliotheque>, Recherchable {
     String SQL = "SELECT id FROM documents";
 
     // Retrieves all document IDs and uses findById for complex loading
-    try (PreparedStatement stmt = Connexion.getInstance().getCn().prepareStatement(SQL);
+    try (PreparedStatement stmt = DatabaseManager.getInstance().getCn().prepareStatement(SQL);
         ResultSet rs = stmt.executeQuery()) {
 
       while (rs.next()) {
@@ -158,7 +158,7 @@ public class DocumentDAO implements IDAO<DocumentBibliotheque>, Recherchable {
     int generatedId;
 
     try {
-      PreparedStatement stmt = Connexion.getInstance().getCn().prepareStatement(query);
+      PreparedStatement stmt = DatabaseManager.getInstance().getCn().prepareStatement(query);
 
       stmt.setString(1, data.getTitre());
       stmt.setString(2, data.getType());
@@ -182,7 +182,7 @@ public class DocumentDAO implements IDAO<DocumentBibliotheque>, Recherchable {
       if (data instanceof Livre) {
         Livre livre = (Livre) data;
         specificSQL = "INSERT INTO livres (id, auteur, isbn, nombrePages, genre) VALUES (?, ?, ?, ?, ?)";
-        specificStmt = Connexion.getInstance().getCn().prepareStatement(specificSQL);
+        specificStmt = DatabaseManager.getInstance().getCn().prepareStatement(specificSQL);
         specificStmt.setLong(1, generatedId);
         specificStmt.setString(2, livre.getAuteur());
         specificStmt.setString(3, livre.getIsbn());
@@ -191,7 +191,7 @@ public class DocumentDAO implements IDAO<DocumentBibliotheque>, Recherchable {
       } else if (data instanceof Magazine) {
         Magazine magazine = (Magazine) data;
         specificSQL = "INSERT INTO magazines (id, numeroEdition, mois, editeur) VALUES (?, ?, ?, ?)";
-        specificStmt = Connexion.getInstance().getCn().prepareStatement(specificSQL);
+        specificStmt = DatabaseManager.getInstance().getCn().prepareStatement(specificSQL);
         specificStmt.setLong(1, generatedId);
         specificStmt.setInt(2, magazine.getNumeroEdition());
         specificStmt.setString(3, magazine.getMois());
@@ -199,7 +199,7 @@ public class DocumentDAO implements IDAO<DocumentBibliotheque>, Recherchable {
       } else if (data instanceof DVD) {
         DVD dvd = (DVD) data;
         specificSQL = "INSERT INTO dvds (id, realisateur, duree, genre, classification) VALUES (?, ?, ?, ?, ?)";
-        specificStmt = Connexion.getInstance().getCn().prepareStatement(specificSQL);
+        specificStmt = DatabaseManager.getInstance().getCn().prepareStatement(specificSQL);
         specificStmt.setLong(1, generatedId);
         specificStmt.setString(2, dvd.getRealisateur());
         specificStmt.setInt(3, dvd.getDuree());
@@ -224,7 +224,7 @@ public class DocumentDAO implements IDAO<DocumentBibliotheque>, Recherchable {
   public boolean update(DocumentBibliotheque document) {
     // Step 1: Update base properties
     String baseSQL = "UPDATE documents SET titre = ?, anneePublication = ?, disponible = ? WHERE id = ?";
-    try (PreparedStatement baseStmt = Connexion.getInstance().getCn().prepareStatement(baseSQL)) {
+    try (PreparedStatement baseStmt = DatabaseManager.getInstance().getCn().prepareStatement(baseSQL)) {
       baseStmt.setString(1, document.getTitre());
       baseStmt.setDate(2, new java.sql.Date(document.getAnneePublication().getTime()));
       baseStmt.setBoolean(3, document.getDisponible());
@@ -238,14 +238,14 @@ public class DocumentDAO implements IDAO<DocumentBibliotheque>, Recherchable {
       if (document instanceof Livre) {
         Livre livre = (Livre) document;
         specificSQL = "UPDATE livres SET auteur = ?, genre = ? WHERE id = ?";
-        specificStmt = Connexion.getInstance().getCn().prepareStatement(specificSQL);
+        specificStmt = DatabaseManager.getInstance().getCn().prepareStatement(specificSQL);
         specificStmt.setString(1, livre.getAuteur());
         specificStmt.setString(2, livre.getGenre());
         specificStmt.setLong(3, livre.getId());
       } else if (document instanceof DVD) {
         DVD dvd = (DVD) document;
         specificSQL = "UPDATE dvds SET realisateur = ?, genre = ? WHERE id = ?";
-        specificStmt = Connexion.getInstance().getCn().prepareStatement(specificSQL);
+        specificStmt = DatabaseManager.getInstance().getCn().prepareStatement(specificSQL);
         specificStmt.setString(1, dvd.getRealisateur());
         specificStmt.setString(2, dvd.getGenre());
         specificStmt.setLong(3, dvd.getId());
@@ -270,7 +270,7 @@ public class DocumentDAO implements IDAO<DocumentBibliotheque>, Recherchable {
   @Override
   public boolean delete(int id) {
     String SQL = "DELETE FROM documents WHERE id = ?";
-    try (PreparedStatement stmt = Connexion.getInstance().getCn().prepareStatement(SQL)) {
+    try (PreparedStatement stmt = DatabaseManager.getInstance().getCn().prepareStatement(SQL)) {
       stmt.setInt(1, id);
       if (stmt.executeUpdate() != 0) {
         return true;
