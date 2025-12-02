@@ -16,11 +16,9 @@ public class DocumentDAO implements IDAO<DocumentBibliotheque>, Recherchable {
     String titre = baseRs.getString("titre");
 
     String specificSQL = "";
-    // Use the shared connection provided by DatabaseManager.getInstance().getCn()
     try (Connection conn = DatabaseManager.getInstance().getCn()) {
       switch (type) {
         case "LIVRE":
-          // NOTE: Assumes columns 'isbn' and 'nombrePages' exist in the 'livres' table
           specificSQL = "SELECT auteur, isbn, nombrePages, genre FROM livres WHERE id = ?";
           try (PreparedStatement stmt = conn.prepareStatement(specificSQL)) {
             stmt.setLong(1, id);
@@ -34,8 +32,6 @@ public class DocumentDAO implements IDAO<DocumentBibliotheque>, Recherchable {
           }
           break;
         case "MAGAZINE":
-          // NOTE: Assumes columns 'numeroEdition', 'mois', 'editeur' exist in 'magazines'
-          // table
           specificSQL = "SELECT numeroEdition, mois, editeur FROM magazines WHERE id = ?";
           try (PreparedStatement stmt = conn.prepareStatement(specificSQL)) {
             stmt.setLong(1, id);
@@ -49,8 +45,6 @@ public class DocumentDAO implements IDAO<DocumentBibliotheque>, Recherchable {
           }
           break;
         case "DVD":
-          // NOTE: Assumes columns 'realisateur', 'duree', 'genre', 'classification' exist
-          // in 'dvds' table
           specificSQL = "SELECT realisateur, duree, genre, classification FROM dvds WHERE id = ?";
           try (PreparedStatement stmt = conn.prepareStatement(specificSQL)) {
             stmt.setLong(1, id);
@@ -68,7 +62,7 @@ public class DocumentDAO implements IDAO<DocumentBibliotheque>, Recherchable {
       System.err.println("Erreur lors du mapping des données spécifiques du document ID " + id + ": " + e.getMessage());
       throw e;
     }
-    return null; // Unknown or missing document type data
+    return null;
   }
 
   private List<DocumentBibliotheque> executeSearchQuery(String sql, String parameter) {
@@ -222,7 +216,6 @@ public class DocumentDAO implements IDAO<DocumentBibliotheque>, Recherchable {
 
   @Override
   public boolean update(DocumentBibliotheque document) {
-    // Step 1: Update base properties
     String baseSQL = "UPDATE documents SET titre = ?, anneePublication = ?, disponible = ? WHERE id = ?";
     try (PreparedStatement baseStmt = DatabaseManager.getInstance().getCn().prepareStatement(baseSQL)) {
       baseStmt.setString(1, document.getTitre());
