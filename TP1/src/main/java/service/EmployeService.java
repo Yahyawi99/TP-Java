@@ -5,9 +5,7 @@ import java.sql.ResultSet;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import dao.IDac;
 import bean.Employee;
@@ -189,6 +187,35 @@ public class EmployeService implements IDac<Employee> {
     return employees;
   }
 
-  // List <Employee> findBetweenDate(Date d1, Date d2){}
+  List<Employee> findBetweenDate(Date d1, Date d2) {
+    String query = "Select * from employees where dateEmbauche between ? AND ?";
+    List<Employee> employees = new ArrayList<Employee>();
+
+    try {
+      PreparedStatement stmt = Connexion.getInstance().getCn().prepareStatement(query);
+
+      stmt.setDate(1, new Date(d1.getTime()));
+      stmt.setDate(2, new Date(d2.getTime()));
+
+      ResultSet rs = stmt.executeQuery();
+
+      while (rs.next()) {
+        Employee emp = new Employee();
+        emp.setMatricule(rs.getInt("Matricule"));
+        emp.setNom(rs.getString("Nom"));
+        emp.setPrenom(rs.getString("Prenom"));
+        emp.setDateEmbaucheD(rs.getDate("dateEmbauche"));
+        emp.setSexe(rs.getString("sexe"));
+        emp.setSpecialite(rs.getString("specialite").split(","));
+
+        employees.add(emp);
+      }
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return employees;
+  }
 
 }
