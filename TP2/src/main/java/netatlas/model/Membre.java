@@ -10,6 +10,7 @@ public class Membre {
     protected String prenom;
     protected boolean isActive;
     protected int nbAvertissements;
+    protected String hashedPassword;
 
     protected List<Membre> amis = new ArrayList<>();
 
@@ -26,6 +27,14 @@ public class Membre {
 
     public Long getId() {
         return id;
+    }
+
+    public String getHashedPassword() {
+        return hashedPassword;
+    }
+
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
     }
 
     public String getEmail() {

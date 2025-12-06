@@ -12,10 +12,10 @@ public class Publication {
   public Publication() {
   }
 
-  public Publication(Membre auteur, Ressource ressource, Enums.PublicationStatus status) {
+  public Publication(Membre auteur, Ressource ressource, Date datePublication, Enums.PublicationStatus status) {
     this.auteur = auteur;
     this.ressource = ressource;
-    this.datePublication = null;
+    this.datePublication = datePublication;
     this.status = status;
   }
 

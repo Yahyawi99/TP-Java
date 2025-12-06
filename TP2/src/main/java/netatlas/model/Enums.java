@@ -19,4 +19,10 @@ public class Enums {
     LIEN,
     MESSAGE
   }
+
+  public enum InvitationStatus {
+    EN_ATTENTE,
+    ACCEPTEE,
+    REFUSEE
+  }
 }

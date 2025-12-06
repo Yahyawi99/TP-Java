@@ -32,7 +32,7 @@ public class MembreDAO implements IDAO<Membre> {
     }
 
     public boolean create(Membre m) {
-        String sql = "INSERT INTO membres(email, nom, prenom, active, avertissements) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO membres(email, nom, prenom, active, avertissements,password) VALUES(?,?,?,?,?,?)";
 
         try {
             PreparedStatement stmt = Connexion.getInstance().getCn().prepareStatement(sql);
@@ -42,6 +42,7 @@ public class MembreDAO implements IDAO<Membre> {
             stmt.setString(3, m.getPrenom());
             stmt.setBoolean(4, false);
             stmt.setInt(5, m.getNbAvertissements());
+            stmt.setString(6, m.getHashedPassword());
 
             stmt.executeUpdate();
 
@@ -135,6 +136,12 @@ public class MembreDAO implements IDAO<Membre> {
         m.setPrenom(rs.getString("prenom"));
         m.setIsActive(rs.getBoolean("active"));
         m.setNbAvertissements(rs.getInt("avertissements"));
+        m.setHashedPassword(rs.getString("hashedPassword"));
         return m;
+    }
+
+    public boolean verifyPassword(String rawPassword, String hashedPassword) {
+        // compare hashed passwords logic
+        return true;
     }
 }
