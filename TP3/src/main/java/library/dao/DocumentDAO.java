@@ -130,7 +130,6 @@ public class DocumentDAO implements IDAO<DocumentBibliotheque>, Recherchable {
     List<DocumentBibliotheque> documents = new ArrayList<>();
     String SQL = "SELECT id FROM documents";
 
-    // Retrieves all document IDs and uses findById for complex loading
     try (PreparedStatement stmt = DatabaseManager.getInstance().getCn().prepareStatement(SQL);
         ResultSet rs = stmt.executeQuery()) {
 
