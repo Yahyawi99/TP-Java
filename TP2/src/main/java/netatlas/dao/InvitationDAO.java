@@ -1,18 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package netatlas.dao;
 
-
-
-import netatlas.db.ConnectionDB;
+import netatlas.connexion.*;
 import netatlas.model.Invitation;
 import netatlas.model.Membre;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class InvitationDAO {
 
@@ -20,7 +13,7 @@ public class InvitationDAO {
         String sql = "INSERT INTO invitation(expediteur, destinataire, statut) VALUES(?,?,?)";
 
         try (Connection cn = ConnectionDB.getConnection();
-             PreparedStatement ps = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                PreparedStatement ps = cn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             ps.setLong(1, inv.getExpediteur().getId());
             ps.setLong(2, inv.getDestinataire().getId());

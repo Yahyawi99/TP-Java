@@ -6,4 +6,17 @@ public class Enums {
     MODERATEUR,
     ADMINISTRATEUR
   }
+
+  public enum PublicationStatus {
+    EN_ATTENTE_MODERATION,
+    APPROUVEE,
+    SIGNALEE,
+  }
+
+  public enum RessourceType {
+    PHOTO,
+    VIDEO,
+    LIEN,
+    MESSAGE
+  }
 }

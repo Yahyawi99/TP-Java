@@ -10,8 +10,9 @@ import netatlas.model.*;
 public class NetAtlasService {
 
     private MembreDAO membreDAO = new MembreDAO();
+    private RessourceDAO ressourceDAO = new RessourceDAO();
     private InvitationDAO invitationDAO = new InvitationDAO();
-    private ContenuDAO contenuDAO = new ContenuDAO();
+    private PublicationDAO publicationDAO = new PublicationDAO(membreDAO, ressourceDAO);
 
     public void inscrire(Membre m) {
         membreDAO.create(m);
@@ -32,7 +33,7 @@ public class NetAtlasService {
 
     public void publier(Membre m, String texte) {
         Contenu c = new Contenu(null, m, texte);
-        contenuDAO.save(c);
+        contenuDAO.create(c);
         System.out.println("Contenu publié.");
     }
 }

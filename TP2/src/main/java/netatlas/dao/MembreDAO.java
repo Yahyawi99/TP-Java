@@ -10,7 +10,6 @@ import java.util.List;
 
 public class MembreDAO implements IDAO<Membre> {
 
-    @Override
     public boolean update(Membre data) {
         String sql = "UPDATE membres SET email=?, nom=?, prenom=?, active=?, avertissements=? WHERE id=?";
 
@@ -41,7 +40,7 @@ public class MembreDAO implements IDAO<Membre> {
             stmt.setString(1, m.getEmail());
             stmt.setString(2, m.getNom());
             stmt.setString(3, m.getPrenom());
-            stmt.setBoolean(4, m.isIsActive());
+            stmt.setBoolean(4, false);
             stmt.setInt(5, m.getNbAvertissements());
 
             stmt.executeUpdate();
