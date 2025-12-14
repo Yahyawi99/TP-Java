@@ -24,15 +24,15 @@ class ServiceTest {
     mockLivre = new Livre(10, "Mock Livre", new Date(), true, "Auteur", 100, "123", "Science");
   }
 
-  void testEmprunterDocument_Succes() {
+  boolean testEmprunterDocument_Succes() {
     utilisateurDAO.findById(1);
     documentDAO.findById(10);
 
     boolean result = service.emprunterDocument(1, 10);
-
+    return result;
   }
 
-  void testEmprunterDocument_EchecDocumentNonDisponible() {
+  boolean testEmprunterDocument_EchecDocumentNonDisponible() {
     // Configuration: Document non disponible
     mockLivre.setDisponible(false);
     utilisateurDAO.findById(1);
@@ -40,6 +40,7 @@ class ServiceTest {
 
     // Exécution
     boolean result = service.emprunterDocument(1, 10);
+    return result;
   }
 
   void testRetournerDocument_PenaliteCalculee() {
