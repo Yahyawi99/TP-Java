@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "post")
 public class Post {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +17,7 @@ public class Post {
   @JoinColumn(name = "user_id")
   private User author;
 
-  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<Comment> comments = new ArrayList<>();
 
   public Post() {
