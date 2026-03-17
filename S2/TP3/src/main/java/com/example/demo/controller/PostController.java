@@ -23,7 +23,7 @@ public class PostController {
   @GetMapping
   public String listPosts(Model model) {
     model.addAttribute("posts", postService.findAll());
-    return "posts/list";
+    return "posts/index";
   }
 
   // Show form to create a new post
