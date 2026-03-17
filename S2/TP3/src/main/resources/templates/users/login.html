@@ -5,10 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Create New Post - My Blog</title>
+  <title>Login - My Blog</title>
   <meta name="author" content="name">
-  <meta name="description" content="Create a new blog post">
-  <meta name="keywords" content="blog,post,create">
+  <meta name="description" content="Login to your blog account">
+  <meta name="keywords" content="blog,login,account">
   <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
 </head>
@@ -21,9 +21,9 @@
     <div class="container max-w-4xl mx-auto pt-16 md:pt-20 text-center break-normal">
       <!--Title-->
       <p class="text-white font-extrabold text-3xl md:text-5xl">
-        ✍️ Create New Post
+        🔐 Login
       </p>
-      <p class="text-lg md:text-xl text-gray-300">Share your thoughts with the world</p>
+      <p class="text-lg md:text-xl text-gray-300">Welcome back to your blog</p>
     </div>
   </div>
 
@@ -43,12 +43,12 @@
                   th:href="@{/posts}">POSTS</a>
               </li>
               <li class="mr-2">
-                <a class="inline-block py-2 px-2 text-white no-underline hover:underline" th:href="@{/posts/new}">NEW
-                  POST</a>
+                <a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-2"
+                  th:href="@{/posts/new}">NEW POST</a>
               </li>
               <li class="mr-2">
-                <a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-2"
-                  href="#">USERS</a>
+                <a class="inline-block py-2 px-2 text-white no-underline hover:underline"
+                  th:href="@{/users/signup}">SIGNUP</a>
               </li>
             </ul>
           </div>
@@ -76,34 +76,39 @@
 
       <div class="bg-gray-200 w-full text-xl md:text-2xl text-gray-800 leading-normal rounded-t">
 
-        <!-- Form Card -->
+        <!-- Login Form Card -->
         <div class="flex h-full bg-white rounded overflow-hidden shadow-lg mb-6">
           <div class="w-full p-8 md:p-12">
-            <form th:action="@{/posts}" th:object="${post}" method="post" class="space-y-6">
 
-              <!-- Title Field -->
+            <!-- Error Message -->
+            <div th:if="${param.error}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+              <span class="block sm:inline">Invalid username or email. Please try again.</span>
+            </div>
+
+            <!-- Login Form -->
+            <form th:action="@{/users/login}" method="post" class="space-y-6">
+
+              <!-- Username Field -->
               <div>
-                <label for="title" class="block text-sm font-semibold text-gray-700 mb-2">Post Title</label>
-                <input type="text" id="title" th:field="*{title}"
+                <label for="username" class="block text-sm font-semibold text-gray-700 mb-2">Username</label>
+                <input type="text" id="username" name="username"
                   class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Enter your post title" required>
-                <p class="text-xs text-gray-500 mt-1">Max 200 characters</p>
+                  placeholder="Enter your username" required>
               </div>
 
-              <!-- Content Field -->
+              <!-- Email Field -->
               <div>
-                <label for="content" class="block text-sm font-semibold text-gray-700 mb-2">Content</label>
-                <textarea id="content" th:field="*{content}"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                  rows="10" placeholder="Write your post content here..." required></textarea>
-                <p class="text-xs text-gray-500 mt-1">Share your thoughts, ideas, and experiences</p>
+                <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                <input type="email" id="email" name="email"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Enter your email" required>
               </div>
 
               <!-- Form Actions -->
               <div class="flex gap-3 pt-4">
                 <button type="submit"
                   class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition duration-200">
-                  Publish Post
+                  Login
                 </button>
                 <a th:href="@{/posts}"
                   class="flex-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition duration-200 text-center">
@@ -111,11 +116,19 @@
                 </a>
               </div>
             </form>
+
+            <!-- Signup Link -->
+            <div class="mt-6 text-center">
+              <p class="text-gray-600">Don't have an account?
+                <a th:href="@{/users/signup}" class="text-blue-500 hover:text-blue-600 font-semibold">Sign up here</a>
+              </p>
+            </div>
+
           </div>
         </div>
 
       </div>
-      <!--/ Form Content-->
+      <!--/ Login Content-->
 
     </div>
 
