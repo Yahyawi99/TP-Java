@@ -2,9 +2,13 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Comment;
 import com.example.demo.model.Post;
+import com.example.demo.model.User;
 import com.example.demo.services.CommentService;
 import com.example.demo.services.PostService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
@@ -21,8 +25,14 @@ public class CommentRestController {
   }
 
   @PostMapping
-  public Comment addComment(@RequestBody Comment comment) {
-    return commentService.save(comment);
+  public ResponseEntity<Comment> addComment(@RequestBody Comment comment, HttpSession session) {
+    User user = (User) session.getAttribute("user");
+    if (user == null) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+    comment.setAuthor(user);
+    Comment savedComment = commentService.save(comment);
+    return ResponseEntity.ok(savedComment);
   }
 
   @GetMapping("/post/{postId}")

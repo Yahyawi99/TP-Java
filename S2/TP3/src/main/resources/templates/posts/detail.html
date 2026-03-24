@@ -54,6 +54,12 @@
           </div>
 
           <div class="flex w-1/2 justify-end content-center">
+            <div th:if="${currentUser != null}" class="mr-4 text-sm text-white">
+              Logged in as <strong th:text="${currentUser.username}">User</strong>
+            </div>
+            <form th:if="${currentUser != null}" th:action="@{/users/logout}" method="post" class="inline mr-4">
+              <button type="submit" class="text-white hover:text-gray-300">Logout</button>
+            </form>
             <a class="inline-block text-gray-500 no-underline hover:text-white text-center h-10 p-2 md:h-auto md:p-4"
               href="https://twitter.com/intent/tweet?url=#">
               <svg class="fill-current h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
@@ -105,51 +111,58 @@
             <!-- Comments Section -->
             <div class="mt-12 pt-8 border-t border-gray-200">
               <h3 class="text-2xl font-bold text-gray-900 mb-6">
-                <span th:text="${#lists.size(post.comments)}">0</span> Comment<span
-                  th:if="${#lists.size(post.comments) != 1}">s</span>
+                <span th:text="${post.comments.size()}">0</span> Comment<span
+                  th:if="${post.comments.size() != 1}">s</span>
               </h3>
 
               <!-- Comments List -->
               <div th:if="${!#lists.isEmpty(post.comments)}" class="space-y-4 mb-8">
-                <div th:each="comment : ${post.comments}" class="bg-gray-50 rounded-lg p-4 border-l-4 border-blue-500">
+                <div th:each="comment : ${post.comments}"
+                  class="bg-white rounded-lg p-5 shadow-sm border border-gray-200">
                   <div class="flex items-start justify-between mb-3">
                     <div class="flex items-center">
-                      <img class="w-8 h-8 rounded-full mr-3" src="http://i.pravatar.cc/300" alt="Commenter Avatar">
                       <div>
-                        <p class="text-sm font-semibold text-gray-800"
+                        <p class="text-sm font-semibold text-gray-900"
                           th:text="${comment.author != null ? comment.author.username : 'Anonymous'}">Commenter</p>
                         <p class="text-xs text-gray-500">Just now</p>
                       </div>
                     </div>
+                    <div class="flex space-x-2"
+                      th:if="${currentUser != null and comment.author != null and comment.author.id == currentUser.id}">
+                      <a th:href="@{/comments/{id}/edit(id=${comment.id})}"
+                        class="text-blue-500 text-xs hover:underline">Edit</a>
+                      <form th:action="@{/comments/{id}/delete(id=${comment.id})}" method="post" class="inline">
+                        <button type="submit" class="text-red-500 text-xs hover:underline"
+                          onclick="return confirm('Are you sure you want to delete this comment?')">Delete</button>
+                      </form>
+                    </div>
                   </div>
-                  <p class="text-gray-700 text-sm" th:text="${comment.content}">Comment text</p>
+                  <p class="text-gray-700" th:text="${comment.content}">Comment text</p>
                 </div>
               </div>
 
-              <!-- Empty State -->
               <div th:if="${#lists.isEmpty(post.comments)}" class="bg-gray-50 rounded-lg p-6 text-center mb-8">
                 <p class="text-gray-500">No comments yet. Be the first to share your thoughts!</p>
               </div>
 
               <!-- Comment Form -->
-              <div class="bg-gray-50 rounded-lg p-6">
-                <h4 class="text-lg font-semibold text-gray-900 mb-4">Leave a Comment</h4>
-                <form th:action="@{/posts/{id}/comments(id=${post.id})}" method="post">
-                  <div class="mb-4">
-                    <textarea name="commentContent" placeholder="Share your thoughts..."
-                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                      rows="4" required></textarea>
-                  </div>
-                  <div class="flex gap-3">
-                    <button type="submit"
-                      class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg transition duration-200">
-                      Post Comment
-                    </button>
-                    <a th:href="@{/posts}"
-                      class="bg-gray-400 hover:bg-gray-500 text-white font-semibold py-2 px-6 rounded-lg transition duration-200">
-                      Cancel
-                    </a>
-                  </div>
+              <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h4 class="text-lg font-semibold mb-3">Leave a comment</h4>
+
+                <div th:if="${currentUser == null}" class="bg-yellow-100 p-4 rounded text-sm text-gray-700 mb-4">
+                  You must <a th:href="@{/users/login}" class="text-blue-600 hover:underline">log in</a> before
+                  commenting.
+                </div>
+
+                <form th:if="${currentUser != null}" action="#" th:action="@{/comments}" method="post"
+                  class="space-y-4">
+                  <input type="hidden" name="postId" th:value="${post.id}" />
+                  <textarea name="content" rows="4" required
+                    class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-200">
+                  </textarea>
+                  <button type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition">Post
+                    Comment</button>
                 </form>
               </div>
             </div>

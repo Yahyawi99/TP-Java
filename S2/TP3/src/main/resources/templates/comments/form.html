@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Comment Form - My Blog</title>
+  <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
+</head>
+
+<body class="bg-gray-200 font-sans leading-normal tracking-normal">
+
+  <!--Header-->
+  <div class="w-full m-0 p-0 bg-cover bg-bottom"
+    style="background-image:url('/images/cover.jpg'); height: 40vh; max-height:320px;">
+    <div class="container max-w-4xl mx-auto pt-16 md:pt-20 text-center break-normal">
+      <p class="text-white font-extrabold text-3xl md:text-5xl">
+        💬 <span th:text="${comment.id != null ? 'Edit Comment' : 'Add Comment'}">Add Comment</span>
+      </p>
+      <p class="text-lg md:text-xl text-gray-300">Share your thoughts</p>
+    </div>
+  </div>
+
+  <!--Container-->
+  <div class="container px-4 md:px-0 max-w-4xl mx-auto -mt-24">
+
+    <div class="mx-0 sm:mx-6">
+
+      <!--Nav-->
+      <nav class="mt-0 w-full">
+        <div class="container mx-auto flex items-center">
+          <div class="flex w-1/2 pl-4 text-sm">
+            <ul class="list-reset flex justify-between flex-1 md:flex-none items-center">
+              <li class="mr-2">
+                <a class="inline-block py-2 px-2 text-gray-600 no-underline hover:text-gray-200 hover:underline"
+                  th:href="@{/posts}">POSTS</a>
+              </li>
+              <li class="mr-2">
+                <a class="inline-block py-2 px-2 text-white no-underline hover:underline"
+                  th:href="@{/comments/post/{id}(id=${comment.post.id})}">COMMENTS</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <div class="bg-gray-200 w-full text-xl md:text-2xl text-gray-800 leading-normal rounded-t">
+
+        <!-- Form Card -->
+        <div class="flex h-full bg-white rounded overflow-hidden shadow-lg mb-6">
+          <div class="w-full p-8 md:p-12">
+            <form th:action="${comment.id != null ? '/comments/' + comment.id : '/comments'}" th:object="${comment}" method="post" class="space-y-6">
+
+              <!-- Hidden Post ID -->
+              <input type="hidden" th:field="*{post}" />
+
+              <!-- Content Field -->
+              <div>
+                <label for="content" class="block text-sm font-semibold text-gray-700 mb-2">Comment</label>
+                <textarea id="content" th:field="*{content}"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  rows="6" placeholder="Write your comment here..." required></textarea>
+                <p class="text-xs text-gray-500 mt-1">Share your thoughts on this post</p>
+              </div>
+
+              <!-- Form Actions -->
+              <div class="flex gap-3 pt-4">
+                <button type="submit"
+                  class="flex-1 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition duration-200">
+                  <span th:text="${comment.id != null ? 'Update Comment' : 'Post Comment'}">Post Comment</span>
+                </button>
+                <a th:href="@{/comments/post/{id}(id=${comment.post.id})}"
+                  class="flex-1 bg-gray-400 hover:bg-gray-500 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition duration-200 text-center">
+                  Cancel
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>

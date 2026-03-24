@@ -5,6 +5,7 @@ import com.example.demo.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/users")
@@ -35,7 +36,7 @@ public class UserController {
 
   // For now, just redirect to posts after login
   @PostMapping("/login")
-  public String login(@RequestParam String username, @RequestParam String email) {
+  public String login(@RequestParam String username, @RequestParam String email, HttpSession session) {
     // Simple authentication - in real app, you'd check credentials
     User user = userService.findAll().stream()
         .filter(u -> u.getUsername().equals(username) && u.getEmail().equals(email))
@@ -43,9 +44,16 @@ public class UserController {
         .orElse(null);
 
     if (user != null) {
+      session.setAttribute("user", user);
       return "redirect:/posts";
     } else {
       return "redirect:/users/login?error=true";
     }
+  }
+
+  @PostMapping("/logout")
+  public String logout(HttpSession session) {
+    session.invalidate();
+    return "redirect:/users/login";
   }
 }
