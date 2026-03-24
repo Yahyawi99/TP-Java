@@ -34,23 +34,24 @@
 
       <!--Nav-->
       <nav class="mt-0 w-full">
-        <div class="container mx-auto flex items-center">
-
-          <div class="flex w-1/2 pl-4 text-sm">
-            <ul class="list-reset flex justify-between flex-1 md:flex-none items-center">
-              <li class="mr-2">
-                <a class="inline-block py-2 px-2 text-gray-600 no-underline hover:text-gray-200 hover:underline"
-                  th:href="@{/posts}">POSTS</a>
+        <div class="container mx-auto flex items-center justify-between">
+          <div class="flex items-center text-sm">
+            <ul class="list-reset flex space-x-4 items-center">
+              <li>
+                <a class="inline-block py-2 px-2 text-gray-700 hover:text-gray-900" th:href="@{/posts}">POSTS</a>
               </li>
-              <li class="mr-2">
-                <a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-2"
-                  th:href="@{/posts/new}">NEW POST</a>
+              <li>
+                <a class="inline-block py-2 px-2 text-gray-700 hover:text-gray-900" th:href="@{/posts/new}">NEW POST</a>
               </li>
-              <li class="mr-2">
-                <a class="inline-block py-2 px-2 text-white no-underline hover:underline"
-                  th:href="@{/users/login}">LOGIN</a>
+              <li th:if="${currentUser != null}">
+                <span class="text-gray-800">Welcome, <strong th:text="${currentUser.username}">User</strong></span>
               </li>
             </ul>
+          </div>
+          <div th:if="${currentUser != null}">
+            <form th:action="@{/users/logout}" method="post" class="inline">
+              <button type="submit" class="text-gray-700 hover:text-gray-900">Logout</button>
+            </form>
           </div>
 
           <div class="flex w-1/2 justify-end content-center">

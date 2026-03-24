@@ -54,14 +54,21 @@ public class CommentController {
 
   // Save the comment from the form
   @PostMapping
-  public String saveComment(@ModelAttribute Comment comment, HttpSession session) {
+  public String saveComment(@RequestParam Long postId, @RequestParam String content, HttpSession session) {
     User user = (User) session.getAttribute("user");
     if (user == null) {
       return "redirect:/users/login";
     }
+    Post post = postService.findById(postId);
+    if (post == null) {
+      return "redirect:/posts";
+    }
+    Comment comment = new Comment();
+    comment.setPost(post);
     comment.setAuthor(user);
+    comment.setContent(content);
     commentService.save(comment);
-    return "redirect:/comments/post/" + comment.getPost().getId();
+    return "redirect:/posts/" + postId;
   }
 
   // Show form to edit a comment

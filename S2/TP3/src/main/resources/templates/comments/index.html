@@ -2,93 +2,106 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Comments for Post</title>
-	<link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Comments for Post</title>
+  <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
 </head>
 
 <body class="bg-gray-200 font-sans leading-normal tracking-normal">
 
-	<!--Header-->
-	<div class="w-full m-0 p-0 bg-cover bg-bottom"
-		style="background-image:url('/images/cover.jpg'); height: 40vh; max-height:300px;">
-		<div class="container max-w-4xl mx-auto pt-8 md:pt-16 text-center break-normal">
-			<p class="text-white font-extrabold text-2xl md:text-4xl">
-				💬 Comments for: <span th:text="${post.title}">Post Title</span>
-			</p>
-		</div>
-	</div>
+  <!--Header-->
+  <div class="w-full m-0 p-0 bg-cover bg-bottom"
+    style="background-image:url('/images/cover.jpg'); height: 40vh; max-height:300px;">
+    <div class="container max-w-4xl mx-auto pt-8 md:pt-16 text-center break-normal">
+      <p class="text-white font-extrabold text-2xl md:text-4xl">
+        💬 Comments for: <span th:text="${post.title}">Post Title</span>
+      </p>
+    </div>
+  </div>
 
-	<!--Container-->
-	<div class="container px-4 md:px-0 max-w-4xl mx-auto -mt-16">
+  <!--Container-->
+  <div class="container px-4 md:px-0 max-w-4xl mx-auto -mt-16">
 
-		<div class="mx-0 sm:mx-6">
+    <div class="mx-0 sm:mx-6">
 
-			<!--Nav-->
-			<nav class="mt-0 w-full">
-				<div class="container mx-auto flex items-center">
-					<div class="flex w-1/2 pl-4 text-sm">
-						<ul class="list-reset flex justify-between flex-1 md:flex-none items-center">
-							<li class="mr-2">
-								<a class="inline-block py-2 px-2 text-white no-underline hover:underline" th:href="@{/posts}">POSTS</a>
-							</li>
-							<li class="mr-2">
-								<a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-2"
-									th:href="@{/posts/{id}/new(id=${post.id})}">NEW COMMENT</a>
-							</li>
-							<li class="mr-2">
-								<a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-2"
-									th:href="@{/users/login}">LOGIN</a>
-							</li>
-							<li class="mr-2">
-								<form th:action="@{/users/logout}" method="post" class="inline">
-									<button type="submit" class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-2">LOGOUT</button>
-								</form>
-							</li>
-						</ul>
-					</div>
-				</div>
-			</nav>
+      <!--Nav-->
+      <nav class="mt-0 w-full">
+        <div class="container mx-auto flex items-center justify-between">
+          <div class="flex items-center text-sm">
+            <ul class="list-reset flex space-x-4 items-center">
+              <li>
+                <a class="inline-block py-2 px-2 text-white no-underline hover:underline" th:href="@{/posts}">POSTS</a>
+              </li>
+              <li th:if="${currentUser != null}">
+                <a class="inline-block text-gray-200 no-underline hover:text-white py-2 px-2"
+                  th:href="@{/posts/new}">NEW POST</a>
+              </li>
+              <li th:if="${currentUser == null}">
+                <a class="inline-block text-gray-200 no-underline hover:text-white py-2 px-2"
+                  th:href="@{/users/login}">LOGIN</a>
+              </li>
+              <li th:if="${currentUser == null}">
+                <a class="inline-block text-gray-200 no-underline hover:text-white py-2 px-2"
+                  th:href="@{/users/signup}">SIGNUP</a>
+              </li>
+            </ul>
+          </div>
+          <div class="flex items-center text-sm" th:if="${currentUser != null}">
+            <span class="text-gray-100 mr-2">Welcome, <strong th:text="${currentUser.username}">User</strong></span>
+            <form th:action="@{/users/logout}" method="post" class="inline">
+              <button type="submit" class="text-gray-100 hover:text-white py-2 px-2">Logout</button>
+            </form>
+          </div>
+        </div>
+      </nav>
 
-			<div class="bg-gray-200 w-full text-xl md:text-2xl text-gray-800 leading-normal rounded-t">
-				<div class="bg-white rounded-b-lg shadow-lg p-6 mb-6">
-					<h2 class="text-2xl font-bold mb-4">Post Details</h2>
-					<p class="text-gray-700" th:text="${post.content}">Post content...</p>
-					<p class="text-sm text-gray-500 mt-2">By: <span th:text="${post.author != null ? post.author.username : 'Anonymous'}">Author</span></p>
-				</div>
+      <div class="bg-gray-200 w-full text-xl md:text-2xl text-gray-800 leading-normal rounded-t">
+        <div class="bg-white rounded-b-lg shadow-lg p-6 mb-6">
+          <h2 class="text-2xl font-bold mb-4">Post Details</h2>
+          <p class="text-gray-700" th:text="${post.content}">Post content...</p>
+          <p class="text-sm text-gray-500 mt-2">By: <span
+              th:text="${post.author != null ? post.author.username : 'Anonymous'}">Author</span></p>
+        </div>
 
-				<!-- Comments Container -->
-				<div class="bg-white rounded-lg shadow-lg p-6">
-					<h2 class="text-2xl font-bold mb-4">Comments</h2>
+        <!-- Comments Container -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <h2 class="text-2xl font-bold mb-4">Comments</h2>
 
-					<div th:each="comment : ${comments}" class="border-b border-gray-200 pb-4 mb-4 last:border-b-0 last:pb-0 last:mb-0">
-						<div class="flex items-start bg-white shadow-sm hover:shadow-lg rounded-lg p-4 transition-all duration-200">
-							<img class="w-10 h-10 rounded-full mr-4" th:src="@{/images/ghostwind.png}" alt="Avatar">
-							<div class="flex-1">
-								<div class="flex items-center justify-between">
-									<p class="font-semibold text-gray-900" th:text="${comment.author != null ? comment.author.username : 'Anonymous'}">Author</p>
-									<div class="flex space-x-2">
-										<a th:href="@{/comments/{id}/edit(id=${comment.id})}" class="text-blue-500 text-sm hover:underline">Edit</a>
-										<form th:action="@{/comments/{id}/delete(id=${comment.id})}" method="post" class="inline">
-											<button type="submit" class="text-red-500 text-sm hover:underline" onclick="return confirm('Are you sure?')">Delete</button>
-										</form>
-									</div>
-								</div>
-								<p class="text-gray-700 mt-1" th:text="${comment.content}">Comment content...</p>
-							</div>
-						</div>
-					</div>
+          <div th:each="comment : ${comments}"
+            class="border-b border-gray-200 pb-4 mb-4 last:border-b-0 last:pb-0 last:mb-0">
+            <div class="flex items-start bg-white shadow-sm hover:shadow-lg rounded-lg p-4 transition-all duration-200">
+              <img class="w-10 h-10 rounded-full mr-4" th:src="@{/images/ghostwind.png}" alt="Avatar">
+              <div class="flex-1">
+                <div class="flex items-center justify-between">
+                  <p class="font-semibold text-gray-900"
+                    th:text="${comment.author != null ? comment.author.username : 'Anonymous'}">Author</p>
+                  <div class="flex space-x-2"
+                    th:if="${currentUser != null and comment.author != null and comment.author.id == currentUser.id}">
+                    <a th:href="@{/comments/{id}/edit(id=${comment.id})}"
+                      class="text-blue-500 text-sm hover:underline">Edit</a>
+                    <form th:action="@{/comments/{id}/delete(id=${comment.id})}" method="post" class="inline">
+                      <button type="submit" class="text-red-500 text-sm hover:underline"
+                        onclick="return confirm('Are you sure?')">Delete</button>
+                    </form>
+                  </div>
+                </div>
+                <p class="text-gray-700 mt-1" th:text="${comment.content}">Comment content...</p>
+              </div>
+            </div>
+          </div>
 
-					<!-- Empty State -->
-					<div th:if="${#lists.isEmpty(comments)}" class="text-center py-10">
-						<p class="text-gray-500">No comments yet. Be the first to comment!</p>
-						<a th:href="@{/comments/post/{id}/new(id=${post.id})}" class="text-blue-500 hover:underline">Add a comment</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+          <!-- Empty State -->
+          <div th:if="${#lists.isEmpty(comments)}" class="text-center py-10">
+            <p class="text-gray-500">No comments yet. Be the first to comment!</p>
+            <a th:href="@{/comments/post/{id}/new(id=${post.id})}" class="text-blue-500 hover:underline">Add a
+              comment</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
+
 </html>
