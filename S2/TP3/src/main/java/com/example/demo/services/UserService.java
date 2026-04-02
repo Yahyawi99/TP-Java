@@ -28,4 +28,12 @@ public class UserService {
   public void delete(Long id) {
     userRepository.deleteById(id);
   }
+
+  public boolean authenticate(String email, String password) {
+    User user = userRepository.findAll().stream()
+        .filter(u -> u.getEmail().equals(email) && u.getPassword().equals(password))
+        .findFirst()
+        .orElse(null);
+    return user != null;
+  }
 }
