@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Post;
-import com.example.demo.model.Reaction;
 import com.example.demo.model.ReactionType;
 import com.example.demo.model.User;
 import com.example.demo.services.PostService;
