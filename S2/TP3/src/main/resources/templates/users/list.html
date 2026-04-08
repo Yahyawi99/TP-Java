@@ -96,6 +96,9 @@
                     <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email
                     </th>
                     <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bio</th>
+                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Avatar
+                    </th>
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -106,6 +109,17 @@
                     <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900" th:text="${user.email}">
                       email@example.com</td>
                     <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900" th:text="${user.role}">USER</td>
+                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900"
+                      th:text="${user.profile != null ? user.profile.bio : 'N/A'}">Bio</td>
+                    <td class="px-4 py-2 whitespace-nowrap text-sm text-gray-900">
+                      <a th:href="@{/users/{id}(id=${user.id})}" class="flex items-center gap-2">
+                        <img class="w-8 h-8 rounded-full object-cover"
+                          th:src="${user.profile != null && user.profile.avatar != null ? user.profile.avatar : '/images/default-avatar.jpg'}"
+                          alt="avatar" />
+                        <span
+                          th:text="${user.profile != null && user.profile.avatar != null ? 'View' : 'No Avatar'}">View</span>
+                      </a>
+                    </td>
                   </tr>
                 </tbody>
               </table>

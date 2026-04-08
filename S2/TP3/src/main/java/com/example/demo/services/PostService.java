@@ -28,4 +28,23 @@ public class PostService {
   public void delete(Long id) {
     postRepository.deleteById(id);
   }
+
+  public boolean deleteIfOwner(Long id, com.example.demo.model.User currentUser) {
+    if (currentUser == null) {
+      return false;
+    }
+    Post post = findById(id);
+    if (post == null || post.getAuthor() == null || post.getAuthor().getId() == null) {
+      return false;
+    }
+    if (!post.getAuthor().getId().equals(currentUser.getId())) {
+      return false;
+    }
+    postRepository.delete(post);
+    return true;
+  }
+
+  public List<Post> findByTag(String tagName) {
+    return postRepository.findByTagName(tagName);
+  }
 }

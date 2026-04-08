@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.User;
+import com.example.demo.model.Profile;
 import com.example.demo.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,15 +31,17 @@ public class UserController {
 
   @PostMapping("/signup")
   public String signup(@ModelAttribute User user) {
-    // For demo purposes, if email is admin@example.com, make admin
     if ("admin@example.com".equals(user.getEmail())) {
       user.setRole("ADMIN");
     }
+    Profile profile = new Profile();
+    profile.setBio("Hello! I just joined the blog.");
+    profile.setAvatar("/images/default-avatar.jpg");
+    user.setProfile(profile);
     userService.save(user);
     return "redirect:/posts";
   }
 
-  // For now, just redirect to posts after login
   @PostMapping("/login")
   public String login(@RequestParam String email, @RequestParam String password, HttpSession session) {
     if (userService.authenticate(email, password)) {
@@ -64,9 +67,40 @@ public class UserController {
   public String listUsers(Model model, HttpSession session) {
     User currentUser = (User) session.getAttribute("user");
     if (currentUser == null || !"ADMIN".equals(currentUser.getRole())) {
-      return "redirect:/posts"; // Redirect if not admin
+      return "redirect:/posts";
     }
+    model.addAttribute("currentUser", currentUser);
     model.addAttribute("users", userService.findAll());
     return "users/list";
+  }
+
+  @GetMapping("/{id}")
+  public String showUserProfile(@PathVariable Long id, Model model, HttpSession session) {
+    User profileUser = userService.findById(id);
+    if (profileUser == null) {
+      return "redirect:/posts";
+    }
+
+    User currentUser = (User) session.getAttribute("user");
+    model.addAttribute("currentUser", currentUser);
+    model.addAttribute("profileUser", profileUser);
+    return "users/profile";
+  }
+
+  @PostMapping("/{id}/profile")
+  public String updateProfile(@PathVariable Long id, @RequestParam String bio, @RequestParam String avatar,
+      HttpSession session) {
+    User currentUser = (User) session.getAttribute("user");
+    if (currentUser == null || !currentUser.getId().equals(id)) {
+      return "redirect:/posts";
+    }
+
+    User user = userService.findById(id);
+    if (user != null && user.getProfile() != null) {
+      user.getProfile().setBio(bio);
+      user.getProfile().setAvatar(avatar);
+      userService.save(user);
+    }
+    return "redirect:/users/" + id;
   }
 }

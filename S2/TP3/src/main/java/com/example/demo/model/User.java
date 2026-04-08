@@ -2,6 +2,7 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,6 +17,13 @@ public class User {
 
   @OneToMany(mappedBy = "author")
   private List<Post> posts;
+
+  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Reaction> reactions = new ArrayList<>();
+
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "profile_id", unique = true)
+  private Profile profile;
 
   public User() {
   }
@@ -65,5 +73,21 @@ public class User {
 
   public void setRole(String role) {
     this.role = role;
+  }
+
+  public List<Reaction> getReactions() {
+    return reactions;
+  }
+
+  public void setReactions(List<Reaction> reactions) {
+    this.reactions = reactions;
+  }
+
+  public Profile getProfile() {
+    return profile;
+  }
+
+  public void setProfile(Profile profile) {
+    this.profile = profile;
   }
 }

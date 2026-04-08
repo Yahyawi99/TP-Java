@@ -22,7 +22,6 @@ public class CommentController {
     this.postService = postService;
   }
 
-  // List comments for a specific post
   @GetMapping("/post/{postId}")
   public String listComments(@PathVariable Long postId, Model model) {
     Post post = postService.findById(postId);
@@ -34,7 +33,6 @@ public class CommentController {
     return "comments/index";
   }
 
-  // Show form to create a new comment
   @GetMapping("/post/{postId}/new")
   public String showCreateForm(@PathVariable Long postId, Model model, HttpSession session) {
     User user = (User) session.getAttribute("user");
@@ -52,7 +50,6 @@ public class CommentController {
     return "comments/form";
   }
 
-  // Save the comment from the form
   @PostMapping
   public String saveComment(@RequestParam Long postId, @RequestParam String content, HttpSession session) {
     User user = (User) session.getAttribute("user");
@@ -83,7 +80,6 @@ public class CommentController {
     return "comments/form";
   }
 
-  // Update the comment
   @PostMapping("/{id}")
   public String updateComment(@PathVariable Long id, @ModelAttribute Comment comment, HttpSession session) {
     User user = (User) session.getAttribute("user");
@@ -96,7 +92,6 @@ public class CommentController {
     return "redirect:/comments/post/" + existingComment.getPost().getId();
   }
 
-  // Delete a comment
   @PostMapping("/{id}/delete")
   public String deleteComment(@PathVariable Long id, HttpSession session) {
     User user = (User) session.getAttribute("user");
